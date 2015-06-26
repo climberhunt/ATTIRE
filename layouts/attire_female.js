@@ -33,7 +33,7 @@ function grid16x12(index, x, y) {
     return index;
 }
 
-function grid12x8(index, x, y, flip, angle) {
+function hip(index, x, y, flip, angle) {
     // Instance of a zig-zag 8x8 grid with upper-left corner at (x, y)
     var v;
     var u;
@@ -45,18 +45,22 @@ function grid12x8(index, x, y, flip, angle) {
 
     for (v = 0; v < 8; v++) {
         add = 0;
-        for (u = 0; u < 16; u++) {
+		if ((v==3)||(v==6)){
+			index &= ~0x3f; // once we've a few rows done,
+			index += 64;	// skip to the next channel
+		}
+        for (u = 0; u < 22; u++) {
             if ((v<2)&&(u==0)) { u = 3; add = 3; }
             if ((v<4)&&(u==0)) { u = 2; add = 2; }
             if ((v<6)&&(u==0)) { u = 1; add = 1; }
             if (flip) {
-                rx = (v & 1) ? 16-(15-u+add) : 16-(u);
+                rx = (v & 1) ? 22-(21-u+add) : 22-(u);
             } else {
-                rx = (v & 1) ? (15-u+add) : (u);
+                rx = (v & 1) ? (21-u+add) : (u);
             }
             ry = v;
-	    px = rx * Math.cos(radians) -  ry * Math.sin(radians);
-	    py = rx * Math.sin(radians) +  ry * Math.cos(radians);
+		    px = rx * Math.cos(radians) -  ry * Math.sin(radians);
+		    py = rx * Math.sin(radians) +  ry * Math.cos(radians);
             px += x;
             py += y;
             model[index++] = {
@@ -212,48 +216,43 @@ var index = 0;
 next = 0;
 
 // Two bottom grids
-next = grid12x8(next,  3.6, 8, 1, 45);
-next = 128;
-next = grid12x8(next, 17.0, 19, 0, -45);
-next = 256;
+hip(next,  -2, 8, 1, 45);
+next += 128+64;
+hip(next, 18.5, 23.5, 0, -45);
+next += 128+64;
 
 // Triangles under the arms
-next = triangle2(next, 25.0, -3, 0, 0);
-next = 256+128;
-next = triangle2(next, -10.0, -3, 1, 0);
-next = 512;
-
-
-//next = triangle(next, -10, -5, 0);
-//next = triangle(next, 28, -5, 1);
+triangle2(next, 25.0, -3, 0, 0);
+next += 64;
+triangle2(next, -10.0, -3, 1, 0);
+next += 64;
 
 // Shoulders
-next = 512+128;
-next = shoulder(next, 5, -21, 0, 20);
-next = 512+256;
-next = shoulder(next, 11, -16, 1, 340);
+shoulder(next, 5, -21, 0, 20);
+next += 128;
+shoulder(next, 11, -16, 1, 340);
+next += 128;
 
 // Left side of diamond
-next = 1024;
 next = strip(next, 8, 15  , 0, 20.0);
 next = strip(next, 8, 12.5, 7.5, 340.0);
-next = strip(next,12, 15  ,15, 20.0);
-
-// Right side of diamond
-next = 1024+64;
-next = strip(next, 8, 17  , 0, 340.0);
-next = strip(next, 8, 19.5, 7.5,  20.0);
-next = strip(next,12, 17  ,15, 340.0);
+strip(next,16, 15  ,15, 20.0);
+next += 64;
 
 // Strip down the middle. 
-next = 1024+128;
-next = strip(next, 16, 16, -1,  0.0);
+next = strip(next, 16, 16, 14,  180.0);
 
-next = 1024+128+64;
-next = strip(next, 16, 10, 6,  90);
-next = 1024+256;
-next = strip(next, 16, 22, 6,  270);
+// Right side of diamond
+next = strip(next, 8, 17  , 0, 340.0);
+next = strip(next, 8, 19.5, 7.5,  20.0);
+strip(next,16, 17  ,15, 340.0);
+next += 64;
 
+
+strip(next, 16, 10, 6,  90);
+next += 64;
+strip(next, 16, 22, 6,  270);
+next += 64;
 
 
 
