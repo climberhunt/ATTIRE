@@ -53,11 +53,29 @@ function hip(index, x, y, flip, angle) {
             if ((v<2)&&(u==0)) { u = 3; add = 3; }
             if ((v<4)&&(u==0)) { u = 2; add = 2; }
             if ((v<6)&&(u==0)) { u = 1; add = 1; }
-            if (flip) {
-                rx = (v & 1) ? 22-(21-u+add) : 22-(u);
-            } else {
-                rx = (v & 1) ? (21-u+add) : (u);
-            }
+			// Direction of data line for each strip can't 
+			// simply be zig-zag, needs to be hardcoded for 
+			// each channel, so the first LED is at the top.
+			// There are three channels in this segment.
+			// channels 0,2,3,5,6 go down, the rest go up.
+			switch (v) {
+				case 0:
+				case 2:
+				case 3:
+				case 5:
+				case 6:
+					if (flip)
+               			rx = 22-(21-u+add);
+					else
+               			rx = (21-u+add);
+					break;
+				default:
+					if (flip)
+						rx = 22-(u);
+					else
+               			rx = (u);
+					break;
+			}
             ry = v;
 		    px = rx * Math.cos(radians) -  ry * Math.sin(radians);
 		    py = rx * Math.sin(radians) +  ry * Math.cos(radians);
@@ -141,8 +159,22 @@ function shoulder(index, x, y, flip, angle) {
 
 
     for (v = 0; v < 6; v++) {
+		if ((v==3)){
+			index &= ~0x3f; // once we've a few rows done,
+			index += 64;	// skip to the next channel
+		}
         for (u = 0; u < 16; u++) {
-            ry = (v & 1) ? (15-u) : (u);
+			switch (v) {
+				case 0:
+				case 2:
+				case 3:
+				case 5:
+            		ry = u;
+					break;
+				default:
+            		ry = 15-u;
+					break;
+			}
             rx = v;
             if (flip) {
                 rx = (16-rx);
@@ -214,6 +246,7 @@ var index = 0;
 //}
 
 next = 0;
+index = 0;
 
 // Two bottom grids
 hip(next,  -2, 8, 1, 45);
@@ -234,18 +267,18 @@ shoulder(next, 11, -16, 1, 340);
 next += 128;
 
 // Left side of diamond
-next = strip(next, 8, 15  , 0, 20.0);
-next = strip(next, 8, 12.5, 7.5, 340.0);
-strip(next,16, 15  ,15, 20.0);
+index = strip(next, 8, 15  , 0, 20.0);
+index = strip(index, 8, 12.5, 7.5, 340.0);
+strip(index,16, 15  ,15, 20.0);
 next += 64;
 
 // Strip down the middle. 
-next = strip(next, 16, 16, 14,  180.0);
+index = strip(next, 16, 16, 14,  180.0);
 
 // Right side of diamond
-next = strip(next, 8, 17  , 0, 340.0);
-next = strip(next, 8, 19.5, 7.5,  20.0);
-strip(next,16, 17  ,15, 340.0);
+index = strip(index, 8, 17  , 0, 340.0);
+index = strip(index, 8, 19.5, 7.5,  20.0);
+strip(index,16, 17  ,15, 340.0);
 next += 64;
 
 
