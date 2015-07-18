@@ -236,15 +236,7 @@ function strip(index, length, x, y, angle) {
 }
 
 
-// Eight zig-zag grids
 var index = 0;
-//for (var v = 1; v < 2; v++) {
-//	for (var u = 1; u < 2; u++) {
-//		grid16x12(index, u*18, v*14);
-//		index += 192;
-//	}
-//}
-
 next = 0;
 index = 0;
 
@@ -255,9 +247,9 @@ hip(next, 18, 22.3, 0, -45);
 next += 128+64;
 
 // Triangles under the arms
-triangle2(next, 25.0, -3, 0, 0);
-next += 64;
 triangle2(next, -10.0, -3, 1, 0);
+next += 64;
+triangle2(next, 25.0, -3, 0, 0);
 next += 64;
 
 // Shoulders
