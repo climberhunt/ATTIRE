@@ -18,9 +18,7 @@ function toRad (degrees) {
 }
 
 
-// Grid of 16x12. 12 strips containing 16 leds each. 
 function grid16x12(index, x, y) {
-	// Instance of a zig-zag 8x8 grid with upper-left corner at (x, y)
 	for (var v = 0; v < 12; v++) {
 		for (var u = 0; u < 16; u++) {
 			var px = (v & 1) ? (x+15-u) : (x+u);
@@ -36,7 +34,6 @@ function grid16x12(index, x, y) {
 var HIP=20;
 
 function hip(index, x, y, flip, angle) {
-	// Instance of a zig-zag 8x8 grid with upper-left corner at (x, y)
 	var v;
 	var u;
 	var px, py, rx, ry;
@@ -91,8 +88,7 @@ function hip(index, x, y, flip, angle) {
 	return index;
 }
 
-function triangle2(index, x, y, flip, angle) {
-	// Instance of a zig-zag 8x8 grid with upper-left corner at (x, y)
+function triangle(index, x, y, flip, angle) {
 	var v;
 	var u;
 	var px, py, rx, ry;
@@ -150,7 +146,6 @@ function triangle2(index, x, y, flip, angle) {
 }
 
 function shoulder(index, x, y, flip, angle) {
-	// Instance of a zig-zag 8x8 grid with upper-left corner at (x, y)
 	var v;
 	var u;
 	var px, py;
@@ -192,29 +187,6 @@ function shoulder(index, x, y, flip, angle) {
 }
 
 
-function triangle(index,x,y, mirror) {
-	var v;
-	var u;
-	var px, py;
-
-	for (v = 8; v > 1; v--) {
-		for (u = 0; u < v; u++) {
-			if (mirror) {
-				px = (v & 1) ? (x+(v-1)-u) : (x+u);
-			} else {
-				px = 8 - ((v & 1) ? (x+(v-1)-u) : (x+u));
-			}
-			//px = x + u;
-			py = y + v;
-			model[index++] = {
-				point: [  (px - centerX) * scale, 0, (py - centerY) * scale ]
-			};
-		}
-	}
-	return index;
-}
-
-
 function strip(index, length, x, y, angle) {
 	var v;
 	var u;
@@ -247,15 +219,15 @@ hip(next, 18, 22.3, 0, -45);
 next += 128+64;
 
 // Triangles under the arms
-triangle2(next, -10.0, -3, 1, 0);
+triangle(next, -10.0, -2, 1, 10);
 next += 64;
-triangle2(next, 25.0, -3, 0, 0);
+triangle(next, 26.5, 1, 0, -10);
 next += 64;
 
 // Shoulders
-shoulder(next, 5, -21, 0, 20);
+shoulder(next, 5, -13, 0, -15);
 next += 64;
-shoulder(next, 11, -16, 1, 340);
+shoulder(next, 12, -17, 1, 15);
 next += 64;
 
 // Left side of diamond
@@ -274,12 +246,10 @@ index = strip(index, 8, 19.5, 7.5,  20.0);
 strip(index,16, 17  ,15, 340.0);
 next += 64;
 
-
-strip(next, 16, 10, 6,  90);
-next += 64;
-strip(next, 16, 22, 6,  270);
-next += 64;
-
-
+// Looks like these horizontal strips around the waist got dropped. 
+//strip(next, 16, 10, 6,  90);
+//next += 64;
+//strip(next, 16, 22, 6,  270);
+//next += 64;
 
 console.log(JSON.stringify(model));
