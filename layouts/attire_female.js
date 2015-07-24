@@ -160,19 +160,19 @@ function shoulder(index, x, y, flip, angle) {
 //			index &= ~0x3f; // once we've a few rows done,
 //			index += 64;	// skip to the next channel
 //		}
-		for (u = 0; u < 15; u++) {
+		for (u = 0; u < 13; u++) {
 			switch (v) {
 				case 0:
 				case 2:
 					ry = u;
 					break;
 				default:
-					ry = 14-u;
+					ry = 12-u;
 					break;
 			}
 			rx = v;
 			if (flip) {
-				rx = (15-rx);
+				rx = (13-rx);
 			}
 		px = rx * Math.cos(radians) -  ry * Math.sin(radians);
 		py = rx * Math.sin(radians) +  ry * Math.cos(radians);
@@ -231,19 +231,17 @@ shoulder(next, 12, -17, 1, 15);
 next += 64;
 
 // Left side of diamond
-index = strip(next, 8, 15  , 0, 20.0);
-index = strip(index, 8, 12.5, 7.5, 340.0);
-strip(index,16, 15  ,15, 20.0);
+index = strip(next, 10, 14.5  , -1.9, 20.0);
+index = strip(index, 12, 11.5, 8, 340.0);
 next += 64;
 
 // Strip down the middle. 
-index = strip(next, 16, 16, 14,  180.0);
-next += 64;
+//index = strip(next, 16, 16, 14,  180.0);
+//next += 64;
 
 // Right side of diamond
-index = strip(next, 8, 17  , 0, 340.0);
-index = strip(index, 8, 19.5, 7.5,  20.0);
-strip(index,16, 17  ,15, 340.0);
+index = strip(next, 10, 16.5  , -2, 340.0);
+index = strip(index, 12, 19.5, 8,  20.0);
 next += 64;
 
 // Looks like these horizontal strips around the waist got dropped. 
