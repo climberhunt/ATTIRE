@@ -219,15 +219,15 @@ hip(next, 18, 22.3, 0, -45);
 next += 128+64;
 
 // Triangles under the arms
-triangle(next, -10.0, -2, 1, 10);
+triangle(next, -9.0, -1, 1, 0);
 next += 64;
-triangle(next, 26.5, 1, 0, -10);
+triangle(next, 24, -1, 0, 0);
 next += 64;
 
 // Shoulders
-shoulder(next, 5, -13, 0, -15);
+shoulder(next, -4, -13.5, 1, -10);
 next += 64;
-shoulder(next, 12, -17, 1, 15);
+shoulder(next, 22, -16, 0, 10);
 next += 64;
 
 // Left side of diamond
